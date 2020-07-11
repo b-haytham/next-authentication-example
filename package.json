@@ -1,0 +1,20 @@
+{
+  "name": "next-auth-example",
+  "version": "1.0.0",
+  "description": "next authentication example with next mongodb express",
+  "main": "server.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "author": "boussarsar haytham",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.23",
+    "next": "^9.4.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
