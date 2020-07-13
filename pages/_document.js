@@ -4,7 +4,7 @@ import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheets } from "@material-ui/core";
 import theme from "../theme";
 
-export default class MyDocument extends Document {
+class MyDocument extends Document {
 	render() {
 		return (
 			<Html lang="en">
@@ -41,9 +41,14 @@ MyDocument.getInitialProps = async (ctx) => {
 	return {
 		...initialProps,
 		// Styles fragment is rendered after the app and page rendering finish.
-		styles: [
-			...React.Children.toArray(initialProps.styles),
-			sheets.getStyleElement(),
-		],
+		styles: (
+			<React.Fragment>
+			  {initialProps.styles}
+			  {sheets.getStyleElement()}
+			</React.Fragment>
+		  )
 	};
 };
+
+
+export default MyDocument
