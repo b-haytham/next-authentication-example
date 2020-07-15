@@ -21,35 +21,51 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Form = (props) => {
-    const classes = useStyles();
-    const [emailValue, setEmailValue] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+	const classes = useStyles();
+	const [userName, setUserName] = useState("");
+	const [emailValue, setEmailValue] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        props.onSubmit(emailValue, password, confirmPassword)
-    }
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if(props.signUp){
+			props.onSubmit(userName, emailValue, password, confirmPassword);
+		}else{
+			props.onSubmit(emailValue, password)
+		}
+	};
 
 	return (
 		<form onSubmit={handleSubmit} className={classes.form}>
+			{props.signUp && (
+				<TextField
+					className={classes.input}
+					id="username"
+					label="UserName"
+					value={userName}
+					onChange={(e) => setUserName(e.target.value)}
+                    required
+                    autoComplete='off'
+				/>
+			)}
 			<TextField
 				className={classes.input}
 				id="email"
 				label="Email"
 				type="email"
-                value={emailValue}
-                onChange={(e)=> setEmailValue(e.target.value)}
-                required
-                autoComplete='off'
+				value={emailValue}
+				onChange={(e) => setEmailValue(e.target.value)}
+				required
+				autoComplete="off"
 			/>
 			<TextField
 				className={classes.input}
 				id="password"
 				label="Password"
-                type="password"
-                onChange={(e)=> setPassword(e.target.value)}
-                value={password}
+				type="password"
+				onChange={(e) => setPassword(e.target.value)}
+				value={password}
 				required
 			/>
 			{props.signUp && (
@@ -57,13 +73,13 @@ const Form = (props) => {
 					className={classes.input}
 					id="confirm-password"
 					label="Confirm password"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e)=> setConfirmPassword(e.target.value)}
+					type="password"
+					value={confirmPassword}
+					onChange={(e) => setConfirmPassword(e.target.value)}
 					required
 				/>
 			)}
-			<Button variant="contained" color="primary" type="submit">
+			<Button variant="contained" color="secondary" type="submit">
 				Submit
 			</Button>
 		</form>

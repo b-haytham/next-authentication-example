@@ -21,19 +21,34 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
 	const classes = useStyles();
 
-    const handleSubmit = (email, password) =>{
-        console.log(email, password)
-    }
+	const handleSubmit = (email, password) => {
+		console.log(email, password);
+		fetch('/api/login',{
+			method: 'POST',
+			headers:{
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				email,
+				password
+			})
+		})
+		.then(res=> res.json())
+		.then(data=> console.log(data))
+		.catch(err=> console.log(err.message))
+	};
 
-    return (
+	return (
 		<>
 			<Container className={classes.container} maxWidth="sm">
-				<Typography className={classes.title} variant="h4">
+				<Typography
+					color="secondary"
+					className={classes.title}
+					variant="h4"
+				>
 					Login
 				</Typography>
-                <Form 
-                    onSubmit={handleSubmit}
-                />
+				<Form onSubmit={handleSubmit} />
 			</Container>
 		</>
 	);
