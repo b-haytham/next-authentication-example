@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const helmet = require("helmet");
 const compression = require("compression");
 
-const {signup, login} = require('./server/controllers')
+const {signup, login, profile} = require('./server/controllers')
 
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== "production";
@@ -45,6 +45,9 @@ app.prepare().then(() => {
 	server.post('/api/signup', signup)
 	
 	server.post('/api/login', login)
+
+	server.get('/api/profile', profile)
+
 
     server.use((err, req, res, next)=>{
         const {status=500, message} = err

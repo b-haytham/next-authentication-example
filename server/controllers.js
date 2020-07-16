@@ -35,19 +35,22 @@ exports.login = async (req, res, next) => {
 	const { email, password } = req.body;
 	try {
 		const user = await User.findOne({ email: email });
-		if (!user) throw { status: 422, message: "user don't exist" };
+		if (!user) throw { status: 404, message: "user don't exist" };
 		bcryt.compare(password, user.password, (err, result) => {
 			if (err) return next(err);
 			if (!result)
-				return next( { status: 422, message: "wrong password or email" });
+				return next({
+					status: 400,
+					message: "wrong password or email",
+				});
 			jwt.sign(
-				{_id: user._id, email: user.email},
+				{ _id: user._id, email: user.email },
 				process.env.JWT_SECRET,
 				{ expiresIn: "1h" },
 				(err, token) => {
-                    if(err) throw err
-                    res.status(200).json({token})
-                }
+					if (err) throw err;
+					res.status(200).json({ token });
+				}
 			);
 		});
 	} catch (error) {
@@ -55,4 +58,23 @@ exports.login = async (req, res, next) => {
 	}
 };
 
-exports.profile = (req, res, next) => {};
+exports.profile = (req, res, next) => {
+	const auth = req.headers.authorization;
+	if (!auth) return next({ status: 401, message: "Not Autharized" });
+	const { token } = JSON.parse(auth);
+	console.log(token);
+	jwt.verify(token, process.env.JWT_SECRET, (err, data) => {
+		if (err) return next(err);
+		console.log(data);
+		User.findOne({ _id: data._id }).then((user) => {
+			return res.status(200).json({
+				_id: user._id,
+				username: user.username,
+				email: user.email,
+			});
+		})
+		.catch(err=>{
+			return next(err)
+		});
+	});
+};
